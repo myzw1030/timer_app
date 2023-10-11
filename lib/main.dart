@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'next_page.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -34,6 +32,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _second = 0;
+  int _millisecond = 0;
+
   Timer? _timer;
   bool _isRunning = false;
 
@@ -47,20 +47,24 @@ class _MyHomePageState extends State<MyHomePage> {
       _timer?.cancel();
     } else {
       _timer = Timer.periodic(
-        const Duration(seconds: 1),
+        const Duration(milliseconds: 10),
         (timer) {
           setState(() {
-            _second++;
+            _millisecond++;
+            if (_millisecond == 100) {
+              _millisecond = 0;
+              _second++;
+            }
           });
 
-          if (_second == 10) {
-            resetTimer();
+          // if (_second == 10) {
+          //   resetTimer();
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const NextPage()),
-            );
-          }
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => const NextPage()),
+          //   );
+          // }
         },
       );
     }
@@ -73,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _timer?.cancel();
     setState(() {
       _second = 0;
+      _millisecond = 0;
       _isRunning = false;
     });
   }
@@ -88,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '$_second',
+              '$_second:$_millisecond',
               style: const TextStyle(
                 fontSize: 100,
               ),
